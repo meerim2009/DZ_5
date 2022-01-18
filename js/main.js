@@ -89,6 +89,7 @@ const modalTimeout = setTimeout(openModal, 5000)
 
 
 // data
+
 const deadline = '2021-12-25'
 
 function getTimeRemaining(deadline) {
@@ -115,7 +116,7 @@ function setClock(element, deadline) {
 		minutes = elem.querySelector('#minutes'),
 		seconds = elem.querySelector('#seconds');
 
-	setInterval(updateClock, 1000)
+	let interval = setInterval(updateClock, 1000)
 
 	updateClock()
 
@@ -130,10 +131,20 @@ function setClock(element, deadline) {
 
 	function updateClock() {
 		const t = getTimeRemaining(deadline);
-		days.innerHTML = makeZero(t.days);
+		if(t < deadline){
+			days.innerHTML = makeZero(t.days);
 		hours.innerHTML = makeZero(t.hours);
 		minutes.innerHTML = makeZero(t.minutes);
 		seconds.innerHTML = makeZero(t.seconds)
+		}else{
+			clearInterval(interval)
+		days.innerHTML = '00'
+		hours.innerHTML = '00'
+		minutes.innerHTML = '00'
+		seconds.innerHTML = '00'
+
+		}
+
 	}
 }
 
