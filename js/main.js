@@ -189,3 +189,51 @@ const card1 = new Menu(
 	"229"
 )
 card1.render()
+
+
+
+// form
+const forms = document.querySelectorAll('form')
+const message = {
+	loading: 'Идет загрузка...',
+	success: 'Спасибо, скоро свяжемся !',
+	fail: 'Что-то пошло не так'
+}
+
+forms.forEach(item => {
+	postData(item)
+})
+
+function postData (form) {
+	form.addEventListener('submit', (e) => {
+		e.preventDefault()
+
+		const messageBlock = document.createElement('div')
+		messageBlock.textContent = message.loading
+		form.append(messageBlock)
+
+		const request = new XMLHttpRequest()
+		request.open('POST', 'server.php')
+		request.setRequestHeader('Content-type', 'application/json')
+
+		const formData = new FormData(form)
+		const object = {}
+
+		formData.forEach((item, i) => {
+			object[i] = item
+		})
+
+		const json = JSON.stringify(object)
+
+		request.send(json)
+
+		request.addEventListener('load', () => {
+			if(request.status === 200){
+				console.log(request.response)
+				messageBlock.textContent = message.success
+			} else {
+				messageBlock.textContent = message.fail
+			}
+		})
+	})
+}
